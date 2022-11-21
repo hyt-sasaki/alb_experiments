@@ -11,5 +11,8 @@ router.get('/api', function(req, res, next) {
 router.get('/api/hoge', function(req, res, next) {
   res.send('api hogehoge')
 });
+router.get('/api/headers', function(req, res, next) {
+  res.send(req.headers)
+});
 
 module.exports = router;

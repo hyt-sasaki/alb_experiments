@@ -166,6 +166,7 @@ resource "aws_lb_listener_rule" "backend_https_oidc" {
       issuer                 = "https://login.microsoftonline.com/${local.tennant_id}/v2.0"
       token_endpoint         = "https://login.microsoftonline.com/${local.tennant_id}/oauth2/v2.0/token"
       user_info_endpoint     = "https://graph.microsoft.com/oidc/userinfo"
+      scope                  = "openid email"
     }
   }
   action {

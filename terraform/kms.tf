@@ -5,44 +5,44 @@ data "aws_iam_policy_document" "key_static_hosting" {
   version = "2012-10-17"
   # デフォルトキーポリシー
   statement {
-    sid = "Enable IAM User Permissions"
+    sid    = "Enable IAM User Permissions"
     effect = "Allow"
     principals {
-      type = "AWS"
-      identifiers = [ "arn:aws:iam::${data.aws_caller_identity.self.account_id}:root" ]
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.self.account_id}:root"]
     }
-    actions = [ "kms:*" ]
-    resources = [ "*" ]
+    actions   = ["kms:*"]
+    resources = ["*"]
   }
   # OACで必要なキーポリシー
   statement {
-    sid = "AllowCloudFrontServicePrincipalSSE-KMS"
+    sid    = "AllowCloudFrontServicePrincipalSSE-KMS"
     effect = "Allow"
     principals {
-      type = "AWS"
-      identifiers = [ "arn:aws:iam::${data.aws_caller_identity.self.account_id}:root" ]
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.self.account_id}:root"]
     }
     principals {
-      type = "Service"
-      identifiers = [ "cloudfront.amazonaws.com" ]
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
     }
     actions = [
       "kms:Decrypt",
       "kms:Encrypt",
       "kms:GenerateDataKey*"
     ]
-    resources = [ "*" ]
+    resources = ["*"]
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "AWS:SourceArn"
-      values = [ aws_cloudfront_distribution.static_hosting.arn ]
+      values   = [aws_cloudfront_distribution.static_hosting.arn]
     }
   }
 }
 
 resource "aws_kms_key" "static_hosting" {
-  description             = "static hosting customer managed key"
-  policy = data.aws_iam_policy_document.key_static_hosting.json
+  description         = "static hosting customer managed key"
+  policy              = data.aws_iam_policy_document.key_static_hosting.json
   enable_key_rotation = true
   # 検証用のため7日に設定
   deletion_window_in_days = 7

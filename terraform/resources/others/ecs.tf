@@ -105,7 +105,7 @@ resource "aws_ecs_service" "backend" {
   network_configuration {
     assign_public_ip = true
     subnets = [
-      aws_subnet.public_1a.id,
+      local.aws_subnet.public_1a.id,
       //aws_subnet.public_1c.id,
     ]
     security_groups = [
@@ -127,7 +127,7 @@ resource "aws_ecs_service" "backend" {
 
 resource "aws_lb_target_group" "backend" {
   name                 = "${local.app_name}-service-tg-backend"
-  vpc_id               = aws_vpc.this.id
+  vpc_id               = local.aws_vpc.this.id
   target_type          = "ip"
   port                 = 3000
   protocol             = "HTTP"

@@ -4,7 +4,7 @@
 resource "aws_security_group" "alb" {
   name        = "${local.app_name}-integrated-alb"
   description = "${local.app_name} alb rule based routing"
-  vpc_id      = aws_vpc.this.id
+  vpc_id      = local.aws_vpc.this.id
   egress {
     from_port   = 0
     protocol    = "-1" # あとで調べる
@@ -45,8 +45,8 @@ resource "aws_lb" "this" {
     aws_security_group.alb.id
   ]
   subnets = [
-    aws_subnet.public_1a.id,
-    aws_subnet.public_1c.id,
+    local.aws_subnet.public_1a.id,
+    local.aws_subnet.public_1c.id,
   ]
   access_logs {
     bucket  = aws_s3_bucket.bucket_alb_log.bucket

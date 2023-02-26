@@ -15,7 +15,7 @@ remote_state {
   config = {
     bucket = "hytssk-remote-tfstate"
 
-    key                       = "alb_experiments"
+    key                       = "alb_experiments/${local.target_dir}/terraform.tfstate"
     region                    = "ap-northeast-1"
     skip_bucket_versioning    = true
     skip_bucket_ssencryption  = true

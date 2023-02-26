@@ -21,8 +21,8 @@ resource "aws_internet_gateway" "this" {
 }
 
 resource "aws_subnet" "public_1a" {
-  vpc_id = aws_vpc.this.id
-  cidr_block = "192.168.1.0/24"
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = "192.168.1.0/24"
   availability_zone = "ap-northeast-1a"
   tags = {
     Name = "${local.app_name}-public-1a"
@@ -30,8 +30,8 @@ resource "aws_subnet" "public_1a" {
 }
 
 resource "aws_subnet" "public_1c" {
-  vpc_id = aws_vpc.this.id
-  cidr_block = "192.168.2.0/24"
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = "192.168.2.0/24"
   availability_zone = "ap-northeast-1c"
   tags = {
     Name = "${local.app_name}-public-1c"
@@ -43,8 +43,8 @@ resource "aws_subnet" "public_1c" {
 ####################################################
 
 resource "aws_subnet" "private_1a" {
-  vpc_id = aws_vpc.this.id
-  cidr_block = "192.168.10.0/24"
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = "192.168.10.0/24"
   availability_zone = "ap-northeast-1a"
   tags = {
     Name = "${local.app_name}-private-1a"
@@ -52,8 +52,8 @@ resource "aws_subnet" "private_1a" {
 }
 
 resource "aws_subnet" "private_1c" {
-  vpc_id = aws_vpc.this.id
-  cidr_block = "192.168.20.0/24"
+  vpc_id            = aws_vpc.this.id
+  cidr_block        = "192.168.20.0/24"
   availability_zone = "ap-northeast-1c"
   tags = {
     Name = "${local.app_name}-private-1c"
@@ -99,12 +99,12 @@ resource "aws_route_table" "public" {
 ####################################################
 
 resource "aws_route_table_association" "public_1a_to_ig" {
-  subnet_id = aws_subnet.public_1a.id
+  subnet_id      = aws_subnet.public_1a.id
   route_table_id = aws_route_table.public.id
 }
 
 resource "aws_route_table_association" "public_1c_to_ig" {
-  subnet_id = aws_subnet.public_1c.id
+  subnet_id      = aws_subnet.public_1c.id
   route_table_id = aws_route_table.public.id
 }
 

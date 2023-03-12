@@ -5,9 +5,9 @@
  */
 import Client, { connect } from '@dagger.io/dagger';
 import { green } from 'console-log-colors'
-import { genMountAwsSecretCallback } from "./dagger/local.js";
-import { Container } from "./dagger/dagger.js";
-import {Change, PlanResult, ResourceChange} from "./dagger/terraform.js";
+import { genMountAwsSecretCallback } from "./local.js";
+import { Container } from "./dagger.js";
+import { Change, PlanResult, ResourceChange } from "./terraform.js";
 
 
 const PLAN_OUT_FILE = "tfplan.binary"
@@ -57,6 +57,8 @@ void connect(
         if (detectedChanges.length > 0) {
             process.exit(1)
         }
+    }, {
+        Workdir: ".."
     }
 );
 

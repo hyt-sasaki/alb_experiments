@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dagger:terragrunt": "node --no-warnings=ExperimentalWarning --loader ts-node/esm ./run_terragrunt.ts",
+    "dagger:plan_all": "node --no-warnings=ExperimentalWarning --loader ts-node/esm ./plan_all.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

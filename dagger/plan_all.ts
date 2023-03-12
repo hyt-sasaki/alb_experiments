@@ -23,6 +23,11 @@ type OutputChange = {
     change: Change,
 }
 
+if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+    console.error("AWS_ACCESS_KEY_IDとAWS_SECRET_ACCESS_KEYの環境変数をセットしてください")
+    process.exit(1)
+}
+
 void connect(
     async (client: Client) => {
         // srcコードとAWSのクレデンシャルをホストから取得しセットする
@@ -58,7 +63,7 @@ void connect(
             process.exit(1)
         }
     }, {
-        Workdir: ".."
+        Workdir: ".."   // projectのroot
     }
 );
 

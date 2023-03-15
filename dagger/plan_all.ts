@@ -33,13 +33,21 @@ void connect(
   async (client: Client) => {
     // srcコードとAWSのクレデンシャルをホストから取得しセットする
     const src = client.host().directory(".", {
-      include: ["terraform"],
+      include: ["terraform/**/*.tf", "terraform/**/*.hcl"],
+      exclude: [
+        "**/.terragrunt-cache",
+        "**/.terraform.lock.hcl",
+        "**/.terraform",
+      ],
     });
     const runner = client
       .container()
       .from("alpine/terragrunt")
       .withMountedDirectory("/src", src)
       .withWorkdir("/src/terraform")
+      .withExec(["mkdir", "-p", "/src/.terraform", "/src/.terragrunt"])
+      .withEnvVariable("TF_PLUGIN_CACHE_DIR", "/src/.terraform")
+      .withEnvVariable("TERRAGRUNT_DOWNLOAD_DIR", "/src/.terragrunt")
       .with(genMountAwsSecretCallback(client));
 
     // run-all plan
@@ -90,14 +98,21 @@ void connect(
  */
 const runPlanAll = async (terragrunt: Container) => {
   const resultContainer = terragrunt
-    .withExec(["terragrunt", "run-all", "plan", "-out", PLAN_OUT_FILE])
+    .withExec([
+      "terragrunt",
+      "run-all",
+      "plan",
+      "-out",
+      PLAN_OUT_FILE,
+      "--terragrunt-exclude-dir",
+      ".",
+    ])
     .withExec(["find", ".", "-name", PLAN_OUT_FILE]);
   const targetDirectories = await resultContainer.stdout().then(
     (result) =>
       result
         .split("\n")
         .filter((i) => i) // 空文字を除外
-        .filter((path) => !path.startsWith("./.")) // rootディレクトリを除外
         .map((path) => path.slice(0, path.indexOf(".terragrunt-cache"))) // `.terragrunt-cache`の前までの文字列 (= target dir) を取得
   );
 

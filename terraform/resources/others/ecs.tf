@@ -126,7 +126,7 @@ resource "aws_ecs_service" "backend" {
 }
 
 resource "aws_lb_target_group" "backend" {
-  name                 = "${local.app_name}-service-tg-baackend"
+  name                 = "${local.app_name}-service-tg-backend"
   vpc_id               = var.vpc_id
   target_type          = "ip"
   port                 = 3000

@@ -39,6 +39,10 @@ void connect(
     // 差分が検知された場合にexit codeを1にする
     if (detectedChanges.length > 0) {
       process.exit(1);
+    } else {
+      console.log(
+        green("No Changes for Any Resources. Infrastructure is UP-TO-DATE.")
+      );
     }
   },
   {

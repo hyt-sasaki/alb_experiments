@@ -1,0 +1,29 @@
+name: Plan all
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dagger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::146161350821:role/terraform_plan_assume_role
+          aws-region: ap-northeast-1
+          role-skip-session-tagging: true
+          role-duration-seconds: 2400
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      - name: Install
+        run: npm install
+        working-directory: dagger
+      - name: Release and deploy with Dagger
+        run: npm run dagger:plan_all
+        working-directory: dagger

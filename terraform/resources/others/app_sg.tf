@@ -1,7 +1,7 @@
 resource "aws_security_group" "app" {
   name        = "${local.app_name}-app"
   description = "Security Group for Application"
-  vpc_id      = local.aws_vpc.this.id
+  vpc_id      = var.vpc_id
   tags = {
     Name = "${local.app_name}-app"
   }

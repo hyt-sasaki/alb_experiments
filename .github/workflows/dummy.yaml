@@ -19,16 +19,43 @@ jobs:
           role-to-assume: arn:aws:iam::146161350821:role/terraform_plan_assume_role
           aws-region: ap-northeast-1
           role-skip-session-tagging: true
-          role-duration-seconds: 2400
+          role-duration-seconds: 3600
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version-file: 'dagger/.node-version'
+          node-version-file: dagger/.node-version
           cache: npm
           cache-dependency-path: dagger/package-lock.json
       - name: Install
-        run: npm install
+        run: npm ci
         working-directory: dagger
-      - name: Release and deploy with Dagger
+      - name: Terragrunt run-all plan with Dagger
+        id: plan
         run: npm run dagger:plan_all
         working-directory: dagger
+      - name: Get contents
+        if: failure()
+        id: get_contents
+        run: echo "content=$(cat build/summary.txt)" >> $GITHUB_OUTPUT
+      - name: Send snippet to Slack
+        if: failure()
+        uses: slackapi/slack-github-action@v1.23.0
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          payload: |
+            {
+              "pretext": "Here is a code snippet:",
+              "text": "```${{ steps.get_contents.outputs.content }}```",
+              "title": "Snippet from GitHub Actions",
+              "title_link": "",
+              "mrkdwn_in": ["text", "pretext"],
+              "color": "#36a64f",
+              "fields": [
+                {
+                  "title": "Language",
+                  "value": "javascript",
+                  "short": true
+                }
+              ]
+            }

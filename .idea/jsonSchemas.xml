@@ -14,6 +14,9 @@
                   <Item>
                     <option name="path" value=".github/workflows/plan-all.yaml" />
                   </Item>
+                  <Item>
+                    <option name="path" value=".github/workflows/dummy.yaml" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>

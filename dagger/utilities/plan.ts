@@ -1,13 +1,13 @@
 import { Change, PlanResult, ResourceChange } from "../types/terraform.js";
 import { Container } from "../types/dagger.js";
 
-type DetectedChange = {
+export type DetectedChange = {
   targetDir: string;
   changedResources: ResourceChange[];
   changedOutputs: OutputChange[];
 };
 type OutputChange = {
-  name: string;
+  outputName: string;
   change: Change;
 };
 
@@ -105,10 +105,12 @@ const detectChange =
     const outputChanges = planResult.output_changes;
     const changedOutputs = outputChanges
       ? Object.keys(outputChanges)
-          .filter((key) => !outputChanges[key].actions.includes("no-op"))
-          .map((key) => ({
-            name: key,
-            change: outputChanges[key],
+          .filter(
+            (outputName) => !outputChanges[outputName].actions.includes("no-op")
+          )
+          .map((outputName) => ({
+            outputName,
+            change: outputChanges[outputName],
           }))
       : [];
 

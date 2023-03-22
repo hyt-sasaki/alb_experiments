@@ -1,15 +1,14 @@
-export type PlanResult = {
+export interface PlanResult {
   resource_changes: ResourceChange[];
   output_changes?: OutputChanges;
-};
-type ResourceChange = {
+}
+interface ResourceChange {
   address: string;
   change: Change;
-};
-type OutputChanges = {
+}
+interface OutputChanges {
   [key: string]: Change;
-};
-
-type Change = {
+}
+interface Change {
   actions: ("no-op" | "create" | "read" | "update" | "delete")[];
-};
+}
